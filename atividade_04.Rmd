@@ -1,0 +1,146 @@
+Projeto Integrador - Atividade 04
+Por Ana Beatriz Martins
+-------------------------------------
+
+```{r}
+install.packages("readr")
+install.packages("dplyr")
+install.packages("descr")
+
+library (descr)
+library (dplyr)
+library (readr)
+enade14 <- read_csv2 ("http://raw.githubusercontent.com/neylsoncrepalde/introducao_ao_r/master/dados/enade_2014_amostra.csv")
+  
+)
+```
+
+
+
+*Extraia a média, a mediana, mínimo, máximo, variância e desvio padrão da idade para todos os alunos da nossa amostra aleatória.*  
+
+```{r}
+summary(enade14$nu_idade)
+boxplot(enade14$nu_idade, col = "#b0e0e6")
+sd(enade14$nu_idade)
+var(enade14$nu_idade)
+    
+    ```
+
+*Elabore uma tabela de frequência da quantidade de alunos por sexo. Corrija a variável caso alguma categoria esteja “sobrando”.*
+
+```{r}
+enade14$sexo  <-  enade14$tp_sexo
+enade14$sexo [enade14$ sexo  == "N"]
+freq(enade14$sexo, col= "#ffc0b", main  =  "Sexo dos alunos - Enade 2014")
+
+
+```
+
+*Agora extraia a média, a mediana, mínimo, máximo, variância e desvio padrão da idade para cada categoria de sexo. Exiba os mesmos resultados com um gráfico.*
+
+```{r}
+enade14$fem <- ifelse (enade14$sexo == "F", 0, 1)            
+summary(enade14$nu_idade[enade14$fem == 0]) 
+var(enade14$nu_idade[enade14$fem == 0])
+sd(enade14$nu_idade[enade14$fem == 0])
+boxplot(enade14$nu_idade[enade14$fem == 0],col = "#ffc0cb", main = "Idade das Mulheres - Enade 2014")
+
+           
+enade14$masc <- ifelse(enade14$sexo == "M", 1, 0) 
+summary(enade14$nu_idade[enade14$masc == 1]) 
+var(enade14$nu_idade[enade14$masc == 1])
+sd(enade14$nu_idade[enade14$masc == 1])
+boxplot(enade14$nu_idade[enade14$masc == 1],col = "#ffc0cb", main = "Idade dos Homens - Enade 2014")
+
+```
+
+*Agora, a média, a média, a mínima, a variação e o desvio padrão da pessoa para cada categoria de cor / raça. Exiba os seus resultados com um gráfico.*
+
+```{r}
+summary(enade14$nu_idade[enade14$qe_i2 == "a"]) 
+var(enade14$nu_idade[enade14$qe_i2 == "a"])
+sd(enade14$nu_idade[enade14$qe_i2 == "a"])
+boxplot(enade14$nu_idade[enade14$qe_i2 == "a"], col = "#f4a460", main = "Idade dos Alunos Brancos - ENADE 2014")
+
+summary(enade14$nu_idade[enade14$qe_i2 == "b"]) 
+var(enade14$nu_idade[enade14$qe_i2 == "b"])
+sd(enade14$nu_idade[enade14$qe_i2 == "b"])
+boxplot(enade14$nu_idade[enade14$qe_i2 == "b"], col = "#f5deb3", main = "Idade dos Alunos Negros - ENADE 2014")
+
+summary(enade14$nu_idade[enade14$qe_i2 == "c"]) 
+var(enade14$nu_idade[enade14$qe_i2 == "c"])
+sd(enade14$nu_idade[enade14$qe_i2 == "c"])
+boxplot(enade14$nu_idade[enade14$qe_i2 == "c"], col = "#f08080", main = "Idade dos Alunos Pardos - ENADE 2014")
+
+summary(enade14$nu_idade[enade14$qe_i2 == "d"]) 
+var(enade14$nu_idade[enade14$qe_i2 == "d"])
+sd(enade14$nu_idade[enade14$qe_i2 == "d"])
+boxplot(enade14$nu_idade[enade14$qe_i2 == "d"], col = "#db7093", main = "Idade dos Alunos Amarelos/Orientais - ENADE 2014")
+
+summary(enade14$nu_idade[enade14$qe_i2 == "e"]) 
+var(enade14$nu_idade[enade14$qe_i2 == "e"])
+sd(enade14$nu_idade[enade14$qe_i2 == "e"])
+boxplot(enade14$nu_idade[enade14$qe_i2 == "e"], col = "#f4a460", main = "Idade dos Alunos Indigenas - ENADE 2014")
+```
+
+
+*Verifique a distribuição de alunos por região do país. Exiba uma tabela de freqüências e um gráfico.*
+```{r}
+
+enade14$regiaoAlunos <- enade14$co_regiao_curso
+
+enade14$regiaoAlunos[enade14$regiao == 1] = "Norte"
+enade14$regiaoAlunos[enade14$regiao == 2] = "Nordeste"
+enade14$regiaoAlunos[enade14$regiao == 3] = "Sudeste"
+enade14$regiaoAlunos[enade14$regiao == 4] = "Sul"
+enade14$regiaoAlunos[enade14$regiao == 5] = "Centro-Oeste"
+
+freq(enade14$regiaoAlunos[!is.na(enade14$regiaoAlunos)], 
+     col="#FF0088", main = "Alunos por região do país - ENADE 2014")
+
+freq (enade14$regiaoAlunos)
+
+```
+*Vamos investigar a associação entre a renda e a cor. Faça uma tabela cruzada entre essas duas variáveis.*
+
+```{r}
+
+enade14$corRaca <- enade14$qe_i2  
+
+enade14$corRaca[enade14$corRaca == "a"] <- "Brancos"
+enade14$corRaca[enade14$corRaca == "b"] <- "Negros"
+enade14$corRaca[enade14$corRaca == "c"] <- "Pardos"
+enade14$corRaca[enade14$corRaca == "d"] <- "Amarelos"
+enade14$corRaca[enade14$corRaca == "e"] <- "Indígenas"
+
+
+enade14$renda <- enade14$qe_i8
+
+enade14$renda[enade14$renda == "a"] <- "Até 1,5"
+enade14$renda[enade14$renda == "b"] <- "1,5 a 3"
+enade14$renda[enade14$renda == "c"] <- "3 a 4,5"
+enade14$renda[enade14$renda == "d"] <- "4,5 a 6"
+enade14$renda[enade14$renda == "e"] <- "6 a 10"
+enade14$renda[enade14$renda == "f"] <- "10 a 30"
+enade14$renda[enade14$renda == "g"] <- ">30"
+
+
+corRenda <- table(enade14$corRaca, enade14$renda)
+corRenda
+```
+
+*Guarde a tabela que vc programou no exercício 6 num objeto. Existe algum teste estatístico para sabermos se existe associação entre essas variáveis? Rode o teste e apresente os resultados. (nível easy)*
+
+```{r}
+cr <- corRenda
+chisq.test (cr)
+) 
+```
+
+
+
+
+
+ 
+ 
